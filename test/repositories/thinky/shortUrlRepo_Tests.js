@@ -1,12 +1,13 @@
 var chai = require('chai')
     , expect = chai.expect
-    , thinky = (__dirname + '/../../../util/thinky')
+    , thinky = require(__dirname + '/../../../util/thinky')
     , r = thinky.r
     , _ = require('lodash')
     , repo = require(__dirname + '/../../../libs/repositories/thinky/shortUrlRepo')()
     , models = require(__dirname + '/../../../models/all')
     , fs = require('fs')
-    , async = require('async');
+    , async = require('async')
+    , shortid = require('shortid');
 
 describe('ShortUrl Repository Tests', function () {
 
@@ -58,7 +59,12 @@ describe('ShortUrl Repository Tests', function () {
         var testShortUrlInDB;
 
         beforeEach(function (done) {
-            var testShortUrl = new models.ShortUrl({target: 'http://google.com'});
+            var testShortUrl = new models.ShortUrl(
+                {
+                    target: 'http://google.com',
+                    id: shortid.generate(),
+                    createdAt: r.now()
+                });
             testShortUrl.save().then(function (shortUrl) {
                 testShortUrlInDB = shortUrl;
                 done();
@@ -104,7 +110,12 @@ describe('ShortUrl Repository Tests', function () {
         var testShortUrlInDB;
 
         beforeEach(function (done) {
-            var testShortUrl = new models.ShortUrl({target: 'http://google.com'});
+            var testShortUrl = new models.ShortUrl(
+                {
+                    target: 'http://google.com',
+                    id: shortid.generate(),
+                    createdAt: r.now()
+                });
             testShortUrl.save().then(function (shortUrl) {
                 testShortUrlInDB = shortUrl;
                 done();
