@@ -4,6 +4,10 @@
   "license": "MIT",
   "author": "Christopher Schmitt",
   "repository": "https://github.com/cs-koneko/chisai-node.git",
+  "bugs": {
+    "url": "https://trello.com/b/dRyDwWb1/chisai-node",
+    "email": "cs@konekobox.de"
+  },
   "scripts": {
     "start": "node ./bin/www"
   },
