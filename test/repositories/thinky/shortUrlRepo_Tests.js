@@ -6,7 +6,7 @@ var chai = require('chai')
     , repo = require(__dirname + '/../../../libs/repositories/thinky/shortUrlRepo')()
     , models = require(__dirname + '/../../../models/all')
     , fs = require('fs')
-    , async =  require('async');
+    , async = require('async');
 
 describe('ShortUrl Repository Tests', function () {
 
@@ -14,13 +14,13 @@ describe('ShortUrl Repository Tests', function () {
 
         afterEach(function (done) {
             models.ShortUrl.run(function (err, doc) {
-                if(err){
+                if (err) {
                     console.log(err);
-                }else{
-                    async.each(doc, function (entry,callback) {
-                        entry.deleteAll(null,callback);
+                } else {
+                    async.each(doc, function (entry, callback) {
+                        entry.deleteAll(null, callback);
                     }, function (err) {
-                        if(!err){
+                        if (!err) {
                             done();
                         }
                     });
@@ -33,7 +33,14 @@ describe('ShortUrl Repository Tests', function () {
                 expect(err).to.be.null;
                 expect(entry).not.to.be.null;
                 expect(entry.target).to.be.equal('http://konekobox.de');
-                done();
+                models.ShortUrl.get(entry.id)
+                    .then(function (shorturlEntry) {
+                        expect(shorturlEntry.target).to.be.equal('http://konekobox.de');
+                        done();
+                    })
+                    .error(function (err) {
+                        expect(err).to.be.null;
+                    });
             });
         });
 
@@ -41,6 +48,52 @@ describe('ShortUrl Repository Tests', function () {
             repo.createNew('http://konekoboxde', function (err, entry) {
                 expect(err).not.to.be.null;
                 expect(err.message).to.be.equal("ValidationInvalidUrl");
+                expect(entry).to.be.null;
+                done();
+            });
+        });
+    });
+
+    describe('getTargetById() Function', function () {
+        var testShortUrlInDB;
+
+        beforeEach(function (done) {
+            var testShortUrl = new models.ShortUrl({target: 'http://google.com'});
+            testShortUrl.save().then(function (shortUrl) {
+                testShortUrlInDB = shortUrl;
+                done();
+            });
+        });
+
+        afterEach(function (done) {
+            models.ShortUrl.run(function (err, doc) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    async.each(doc, function (entry, callback) {
+                        entry.deleteAll(null, callback);
+                    }, function (err) {
+                        if (!err) {
+                            done();
+                        }
+                    });
+                }
+            });
+        });
+
+        it('get a shorturl with a existing id', function (done) {
+            repo.getTargetById(testShortUrlInDB.id, function (err, entry) {
+                expect(err).to.be.null;
+                expect(entry).not.to.be.null;
+                expect(entry).to.be.equal(testShortUrlInDB.target);
+                done();
+            });
+        });
+
+        it('get nothing with a non existing id', function (done) {
+            repo.getTargetById(testShortUrlInDB.id + 1, function (err, entry) {
+                expect(err).not.to.be.null;
+                expect(err.message).to.be.equal('ModelIdNotFound');
                 expect(entry).to.be.null;
                 done();
             });
@@ -60,13 +113,13 @@ describe('ShortUrl Repository Tests', function () {
 
         afterEach(function (done) {
             models.ShortUrl.run(function (err, doc) {
-                if(err){
+                if (err) {
                     console.log(err);
-                }else{
-                    async.each(doc, function (entry,callback) {
-                        entry.deleteAll(null,callback);
+                } else {
+                    async.each(doc, function (entry, callback) {
+                        entry.deleteAll(null, callback);
                     }, function (err) {
-                        if(!err){
+                        if (!err) {
                             done();
                         }
                     });
@@ -84,7 +137,7 @@ describe('ShortUrl Repository Tests', function () {
         });
 
         it('get nothing with a non existing id', function (done) {
-            repo.getById(testShortUrlInDB.id+1, function (err, entry) {
+            repo.getById(testShortUrlInDB.id + 1, function (err, entry) {
                 expect(err).not.to.be.null;
                 expect(err.message).to.be.equal('ModelIdNotFound');
                 expect(entry).to.be.null;
