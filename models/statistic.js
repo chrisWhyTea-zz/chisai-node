@@ -1,8 +1,9 @@
-var thinky = require(__dirname+'/../util/thinky.js');
-var type = thinky.type;
+var thinky = require(__dirname+'/../util/thinky.js')
+    , type = thinky.type
+    , shortid = require('shortid');
 
 var Statistic = thinky.createModel("Statistic", {
-    id: type.string(),
+    id: type.string().validator(shortid.isValid).default(shortid.generate()),
     shortId: type.string(),
     visitedAt: type.date()
 });
@@ -10,4 +11,4 @@ var Statistic = thinky.createModel("Statistic", {
 module.exports = Statistic;
 
 var ShortUrl = require(__dirname+"/shortUrl");
-Statistic.belongsTo(ShortUrl,"shorturl","shortId","shortId");
+Statistic.belongsTo(ShortUrl,"shorturl","shortId","id");
