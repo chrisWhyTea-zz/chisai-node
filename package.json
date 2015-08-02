@@ -1,7 +1,9 @@
 {
   "name": "chisai-node",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Christopher Schmitt",
+  "repository": "https://github.com/cs-koneko/chisai-node.git",
   "scripts": {
     "start": "node ./bin/www"
   },
@@ -17,5 +19,9 @@
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
     "thinky": "^2.0.10"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5"
   }
 }
