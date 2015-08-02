@@ -1,5 +1,5 @@
-var   models = require(__dirname+'/../../../models/all')
-    , thinky = require(__dirname+'/../../../util/thinky.js')
+var models = require(__dirname + '/../../../models/all')
+    , thinky = require(__dirname + '/../../../util/thinky.js')
     , r = thinky.r;
 
 
@@ -8,22 +8,39 @@ var   models = require(__dirname+'/../../../models/all')
  * @param url
  * @param callback
  */
-var createNew = function createNew(url,callback) {
+var createNew = function createNew(url, callback) {
     var newShortUrl = new models.ShortUrl({
         target: url
     });
 
-    newShortUrl.save().then(function(shortUrl) {
-        callback(null,shortUrl);
-    }).catch(thinky.Errors.ValidationError, function() {
-        callback(new Error("ValidationInvalidUrl"),null);
-    }).error(function(err) {
-        callback(err,null);
-    });
+    newShortUrl.save()
+        .then(function (shortUrl) {
+            callback(null, shortUrl);
+        })
+        .catch(thinky.Errors.ValidationError, function () {
+            callback(new Error("ValidationInvalidUrl"), null);
+        })
+        .error(function (err) {
+            callback(err, null);
+        });
+};
+
+var getById = function getById(id, callback) {
+    models.ShortUrl.get(id)
+        .then(function (shortUrl) {
+            callback(null, shortUrl);
+        })
+        .catch(thinky.Errors.DocumentNotFound, function () {
+            callback(new Error("ModelIdNotFound"), null);
+        })
+        .error(function (err) {
+            callback(err, null);
+        });
 };
 
 module.exports = function publicFunctions() {
     return {
         createNew: createNew
+        , getById: getById
     };
 };
