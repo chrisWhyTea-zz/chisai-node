@@ -1,0 +1,29 @@
+<script src="/js/Chart.min.js"></script>
+<script>
+    var visitorChart = new Chart(document.getElementById("visitorChart").getContext("2d")).Line(data);
+</script>
+<div class="row">
+    <div class="small-4 small-centered columns" >
+        <div class="row">
+            <div class="small-5 small-centered columns" >
+                <div class="panel">
+                    <a href="{{stats.target}}"><h1 class="text-center"><i class="fa fa-globe"></i> Target</h1></a>
+                    <input type="url" name="urlLong" readonly value="{{stats.target}}">
+                </div>
+            </div>
+        </div>
+        <div class="row" data-equalizer>
+            <div class="small-2 columns">
+                <div class="panel" data-equalizer-watch>
+                    <h2 class="text-center"><i class="fa fa-ticket "></i> Hits</h2>
+                    <h3 class="text-center">{{stats.counter}}</h3>
+                </div>
+            </div>
+            <div class="small-3 columns">
+                <div class="panel" data-equalizer-watch>
+                    <h2 class="text-center"><i class="fa fa-rocket"></i> Last Visit</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
