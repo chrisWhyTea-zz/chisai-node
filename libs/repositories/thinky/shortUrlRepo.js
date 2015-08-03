@@ -1,5 +1,6 @@
 var models = require(__dirname + '/../../../models/all')
     , thinky = require(__dirname + '/../../../util/thinky.js')
+    , shortid = require('shortid')
     , r = thinky.r;
 
 
@@ -10,7 +11,9 @@ var models = require(__dirname + '/../../../models/all')
  */
 var createNew = function createNew(url, callback) {
     var newShortUrl = new models.ShortUrl({
-        target: url
+        id: shortid.generate(),
+        target: url,
+        createdAt: r.now()
     });
 
     newShortUrl.save()
@@ -21,6 +24,7 @@ var createNew = function createNew(url, callback) {
             callback(new Error("ValidationInvalidUrl"), null);
         })
         .error(function (err) {
+            console.log(err);
             callback(err, null);
         });
 };
@@ -49,7 +53,16 @@ var getTargetById = function getTargetById(id, callback) {
  * @param callback
  */
 var getById = function getById(id, callback) {
-    models.ShortUrl.get(id)
+    models.ShortUrl
+        .get(id)
+        .getJoin({
+            statistic: true
+            //{
+            //    _apply: function(sequence) {
+            //        return sequence.group('visitedAt');
+            //    }
+            //}
+        })
         .then(function (shortUrl) {
             callback(null, shortUrl);
         })
@@ -57,6 +70,7 @@ var getById = function getById(id, callback) {
             callback(new Error("ModelIdNotFound"), null);
         })
         .error(function (err) {
+            console.log(err);
             callback(err, null);
         });
 };
