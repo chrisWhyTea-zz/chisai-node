@@ -28,7 +28,7 @@ router.get('/:id', function (req, res) {
         if (err) {
             if (err.message == 'ModelIdNotFound') {
                 res.cookie('flashError', 'ShortUrlNotFound');
-                res.redirect(HttpStatus.NOT_FOUND, '/');
+                res.redirect('/');
             } else {
                 // TODO Log Error in logger facility
                 res.status(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,7 +51,7 @@ router.get('/:id/statistic', function (req, res) {
         if (err) {
             if (err.message == 'ModelIdNotFound') {
                 res.cookie('flashError', 'ShortUrlNotFound');
-                res.redirect(HttpStatus.NOT_FOUND, '/');
+                res.redirect('/');
             } else {
                 // TODO Log Error in logger facility
                 res.status(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -81,7 +81,7 @@ router.post('/', function (req, res) {
             if (err.message == 'ValidationInvalidUrl') {
                 res.cookie('flashError', 'InvalidUrl');
                 res.cookie('flashOldForm', req.body.target);
-                res.redirect(HttpStatus.UNPROCESSABLE_ENTITY, '/');
+                res.redirect('/');
             } else {
                 // TODO Log Error in logger facility
                 res.status(HttpStatus.INTERNAL_SERVER_ERROR);
