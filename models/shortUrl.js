@@ -1,4 +1,4 @@
-var thinky = require(__dirname+'/../util/thinky.js')
+var thinky = require(__dirname + '/../util/thinky.js')
     , r = thinky.r
     , type = thinky.type
     , validator = require('validator')
@@ -13,5 +13,5 @@ var ShortUrl = thinky.createModel("ShortUrl", {
 module.exports = ShortUrl;
 
 var Statistic = require("./statistic.js");
-ShortUrl.hasMany(Statistic,"statistic","id","shortId");
+ShortUrl.hasMany(Statistic, "statistic", "id", "shortId");
 

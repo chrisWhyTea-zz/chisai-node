@@ -1,4 +1,4 @@
-var thinky = require(__dirname+'/../util/thinky.js')
+var thinky = require(__dirname + '/../util/thinky.js')
     , r = thinky.r
     , type = thinky.type
     , shortid = require('shortid');
@@ -12,4 +12,4 @@ var Statistic = thinky.createModel("Statistic", {
 module.exports = Statistic;
 
 var ShortUrl = require("./shortUrl.js");
-Statistic.belongsTo(ShortUrl,"shorturl","shortId","id");
+Statistic.belongsTo(ShortUrl, "shorturl", "shortId", "id");

@@ -17,7 +17,7 @@ var addStatistic = function addStatistic(shortId, callback) {
     });
     newStatisticEntry.save()
         .then(function (result) {
-            callback(null,true);
+            callback(null, true);
         })
         .error(function (err) {
             callback(err, null);
