@@ -7,6 +7,7 @@ var express = require('express')
 
 
 router.get('/', function (req, res) {
+    console.log(req);
     var resObj = {
         flash: {
             success: req.cookies.flashSuccess || null,
@@ -27,7 +28,7 @@ router.get('/:id', function (req, res) {
     shortUrlRepo.getTargetById(req.params.id, function (err, shortUrl) {
         if (err) {
             if (err.message == 'ModelIdNotFound') {
-                res.cookie('flashError', 'ShortUrlNotFound');
+                res.cookie('flashError', 'Shorturl was not found. :(');
                 res.redirect('/');
             } else {
                 // TODO Log Error in logger facility
@@ -50,7 +51,7 @@ router.get('/:id/statistic', function (req, res) {
     shortUrlRepo.getById(req.params.id, function (err, shortUrlStats) {
         if (err) {
             if (err.message == 'ModelIdNotFound') {
-                res.cookie('flashError', 'ShortUrlNotFound');
+                res.cookie('flashError', 'Shorturl was not found. :(');
                 res.redirect('/');
             } else {
                 // TODO Log Error in logger facility
@@ -58,7 +59,8 @@ router.get('/:id/statistic', function (req, res) {
                 res.render('ErrorInternal');
             }
         } else {
-            // TODO use the rethinkDB map reduce function (when it's ready to use in thinky with getJoin
+            shortUrlStats.counter = shortUrlStats.statistic.length;
+            // TODO use the rethinkDB map reduce function (when it's ready to use in thinky with getJoin)
             shortUrlStats.statistic = _.map(
                 _.groupBy(shortUrlStats.statistic, function (n) {
                     return n.visitedAt;
@@ -69,6 +71,7 @@ router.get('/:id/statistic', function (req, res) {
                     return obj;
                 });
             var resObj = {flash: {success: req.cookies.flashSuccess || null}, stats: shortUrlStats};
+            console.log(resObj);
             res.clearCookie('flashSuccess');
             res.render('statistic', resObj);
         }
@@ -79,7 +82,7 @@ router.post('/', function (req, res) {
     shortUrlRepo.createNew(req.body.target, function (err, shortUrlStats) {
         if (err) {
             if (err.message == 'ValidationInvalidUrl') {
-                res.cookie('flashError', 'InvalidUrl');
+                res.cookie('flashError', 'Provided Url is Invalid. Check, and try again!');
                 res.cookie('flashOldForm', req.body.target);
                 res.redirect('/');
             } else {
@@ -88,7 +91,7 @@ router.post('/', function (req, res) {
                 res.render('ErrorInternal');
             }
         } else {
-            res.cookie('flashSuccess', 'ShortUrlCreated');
+            res.cookie('flashSuccess', 'Shorturl was successfully created.');
             res.redirect('/' + shortUrlStats.id + '/statistic');
         }
     });
