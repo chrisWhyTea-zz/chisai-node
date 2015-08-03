@@ -5,12 +5,13 @@ var thinky = require(__dirname+'/../util/thinky.js')
     , shortid = require('shortid');
 
 var ShortUrl = thinky.createModel("ShortUrl", {
-    id: type.string().required().validator(shortid.isValid).default(shortid.generate()),
+    id: type.string().required().validator(shortid.isValid),
     target: type.string().validator(validator.isURL).required(),
-    createdAt: type.date().default(r.now())
+    createdAt: type.date().required()
 });
 
 module.exports = ShortUrl;
 
-var Statistic = require(__dirname+"/statistic");
+var Statistic = require("./statistic.js");
 ShortUrl.hasMany(Statistic,"statistic","id","shortId");
+
