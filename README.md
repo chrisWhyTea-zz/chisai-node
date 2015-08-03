@@ -1,5 +1,5 @@
 # chisai-node
-The Chisai Urlshortener rebuild with nodeJS
+The Chisai (小さい) Urlshortener rebuild with nodeJS
 
 ## Requirements
 - node.js (> V 0.12.5)
